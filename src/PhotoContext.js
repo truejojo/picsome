@@ -1,11 +1,11 @@
 import { createContext, useState, useEffect } from "react";
 
 const PhotoContext = createContext();
+const url =
+  "https://raw.githubusercontent.com/bobziroll/scrimba-react-bootcamp-images/master/images.json";
 
 const PhotoContextProvider = ({ children }) => {
   const [photos, setPhotos] = useState([]);
-  const url =
-    "https://raw.githubusercontent.com/bobziroll/scrimba-react-bootcamp-images/master/images.json";
 
   useEffect(() => {
     const fetchPhotos = async () => {
@@ -20,8 +20,17 @@ const PhotoContextProvider = ({ children }) => {
     fetchPhotos();
   }, []);
 
+  const isToggleFavorite = (id) => {
+    setPhotos(updatePhotos => updatePhotos.map((photo) =>
+       photo.id === id ? { ...photo, isFavorite: !photo.isFavorite } : photo))
+    console.log(`photo id: ${id}`)
+  };
+  console.log(photos);
+  
   return (
-    <PhotoContext.Provider value={{ photos }}>{children}</PhotoContext.Provider>
+    <PhotoContext.Provider value={{ photos, isToggleFavorite }}>
+      {children}
+    </PhotoContext.Provider>
   );
 };
 
