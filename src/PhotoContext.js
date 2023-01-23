@@ -11,6 +11,13 @@ const PhotoContextProvider = ({ children }) => {
   const addToCart = (img) =>
     setCartItems((prevCartItems) => [...prevCartItems, img]);
 
+  const deleteFromCart = (img) =>
+    setCartItems((prevCartItems) =>
+      prevCartItems.filter((current) => current.id !== img.id)
+    );
+
+  const setCartItemsToStart = () => setCartItems([]);
+
   useEffect(() => {
     const fetchPhotos = async () => {
       try {
@@ -30,12 +37,19 @@ const PhotoContextProvider = ({ children }) => {
         photo.id === id ? { ...photo, isFavorite: !photo.isFavorite } : photo
       )
     );
-    console.log(`photo id: ${id}`);
   };
-  console.log(photos);
 
   return (
-    <PhotoContext.Provider value={{ photos, isToggleFavorite, addToCart }}>
+    <PhotoContext.Provider
+      value={{
+        photos,
+        isToggleFavorite,
+        cartItems,
+        addToCart,
+        deleteFromCart,
+        setCartItemsToStart,
+      }}
+    >
       {children}
     </PhotoContext.Provider>
   );

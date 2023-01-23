@@ -3,7 +3,8 @@ import { PhotoContext } from "../PhotoContext";
 
 const Image = ({ className, img }) => {
   const [hovered, setHovered] = useState(false);
-  const { isToggleFavorite, addToCart } = useContext(PhotoContext);
+  const { isToggleFavorite, addToCart, deleteFromCart, cartItems } =
+    useContext(PhotoContext);
 
   const heartIcon = (
     <i
@@ -13,8 +14,16 @@ const Image = ({ className, img }) => {
       onClick={() => isToggleFavorite(img.id)}
     ></i>
   );
-  const cartIcon = hovered && (
+
+  const cartIcon = cartItems.some((item) => item.id === img.id) ? (
+    <i
+      className="ri-shopping-cart-fill cart"
+      onClick={() => deleteFromCart(img)}
+    ></i>
+  ) : hovered ? (
     <i className="ri-add-circle-line cart" onClick={() => addToCart(img)}></i>
+  ) : (
+    ""
   );
 
   return (
