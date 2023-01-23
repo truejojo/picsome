@@ -3,7 +3,7 @@ import useHover from "../hooks/useHover";
 import { PhotoContext } from "../PhotoContext";
 
 const Image = ({ className, img }) => {
-  const {isHovered, ToggleHovered} = useHover();
+  const {isHovered, hoveredRef} = useHover();
   const { isToggleFavorite, addToCart, deleteFromCart, cartItems } =
     useContext(PhotoContext);
 
@@ -30,8 +30,7 @@ const Image = ({ className, img }) => {
   return (
     <div
       className={`${className} image-container`}
-      onMouseEnter={ToggleHovered}
-      onMouseLeave={ToggleHovered}
+      ref={hoveredRef}
     >
       <img className="image-grid" src={img.url} alt="" />
       {heartIcon}
