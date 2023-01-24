@@ -1,50 +1,112 @@
-import { createContext, useState, useEffect } from "react";
+import axios from "axios";
+import { createContext, useReducer, useEffect } from "react";
 
 const PhotoContext = createContext();
+
 const url =
   "https://raw.githubusercontent.com/bobziroll/scrimba-react-bootcamp-images/master/images.json";
 
+const initialState = {
+  loading: true,
+  error: false,
+  photos: [],
+  cartItems: [],
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "FETCH_SUCCESS":
+      return {
+        ...state,
+        loading: false,
+        error: false,
+        photos: action.data,
+      };
+
+    case "FETCH_ERROR":
+      return {
+        ...state,
+        loading: false,
+        error: true,
+      };
+
+    case "TOGGLE_FAVORITE":
+      return {
+        ...state,
+        photos: state.photos.map((photo) =>
+          photo.id === action.id
+            ? { ...photo, isFavorite: !photo.isFavorite }
+            : photo
+        ),
+      };
+
+    case "ADD_TO_CART":
+      return {
+        ...state,
+        cartItems: [...state.cartItems, action.img],
+      };
+
+    case "DELETE_FROM_CART":
+      return {
+        ...state,
+        cartItems: state.cartItems.filter(
+          (current) => current.id !== action.img.id
+        ),
+      };
+
+    case "SET_CART_ITEMS_TO_NULL":
+      return {
+        ...state,
+        cartItems: [],
+      };
+
+    default:
+      return state;
+  }
+};
+
 const PhotoContextProvider = ({ children }) => {
-  const [photos, setPhotos] = useState([]);
-  const [cartItems, setCartItems] = useState([]);
-
-  const addToCart = (img) =>
-    setCartItems((prevCartItems) => [...prevCartItems, img]);
-
-  const deleteFromCart = (img) =>
-    setCartItems((prevCartItems) =>
-      prevCartItems.filter((current) => current.id !== img.id)
-    );
-
-  const setCartItemsToStart = () => setCartItems([]);
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { loading, error, photos, cartItems } = state;
 
   useEffect(() => {
-    const fetchPhotos = async () => {
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
-        setPhotos(data);
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-    fetchPhotos();
+    axios
+      .get(url)
+      .then((response) => {
+        dispatch({ type: "FETCH_SUCCESS", data: response.data });
+      })
+      .catch((error) => {
+        dispatch({ type: "FETCH_ERROR" });
+      });
   }, []);
 
-  const isToggleFavorite = (id) => {
-    setPhotos((updatePhotos) =>
-      updatePhotos.map((photo) =>
-        photo.id === id ? { ...photo, isFavorite: !photo.isFavorite } : photo
-      )
-    );
-  };
+  const isToggleFavorite = (id) =>
+    dispatch({ type: "TOGGLE_FAVORITE", id: id });
+
+  const addToCart = (img) => dispatch({ type: "ADD_TO_CART", img: img });
+
+  const deleteFromCart = (img) =>
+    dispatch({ type: "DELETE_FROM_CART", img: img });
+
+  const setCartItemsToStart = () =>
+    dispatch({ type: "SET_CART_ITEMS_TO_NULL" });
+
+  const isLoading = () => loading;
+
+  const isError = () => error;
+
+  const getPhotos = () => photos;
+
+  const getCartItems = () => cartItems;
 
   return (
     <PhotoContext.Provider
       value={{
-        photos,
+        isLoading,
+        isError,
+        getPhotos,
         isToggleFavorite,
-        cartItems,
+        getCartItems,
         addToCart,
         deleteFromCart,
         setCartItemsToStart,

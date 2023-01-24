@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { PhotoContext } from "../PhotoContext";
 
 const Header = () => {
-  const { cartItems } = useContext(PhotoContext);
+  const { getCartItems } = useContext(PhotoContext);
 
   return (
     <header className="page-header">
@@ -14,7 +14,7 @@ const Header = () => {
         <NavLink to="cart">
           <i
             className={`${
-              cartItems.length > 0
+              getCartItems().length > 0
                 ? "ri-shopping-cart-fill"
                 : "ri-shopping-cart-line"
             } ri-fw ri-2x`}

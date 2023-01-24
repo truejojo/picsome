@@ -4,7 +4,7 @@ import { PhotoContext } from "../PhotoContext";
 
 const Image = ({ className, img }) => {
   const {isHovered, hoveredRef} = useHover();
-  const { isToggleFavorite, addToCart, deleteFromCart, cartItems } =
+  const { isToggleFavorite, addToCart, deleteFromCart, getCartItems } =
     useContext(PhotoContext);
 
   const heartIcon = (
@@ -16,7 +16,7 @@ const Image = ({ className, img }) => {
     ></i>
   );
 
-  const cartIcon = cartItems.some((item) => item.id === img.id) ? (
+  const cartIcon = getCartItems().some((item) => item.id === img.id) ? (
     <i
       className="ri-shopping-cart-fill cart"
       onClick={() => deleteFromCart(img)}

@@ -4,13 +4,15 @@ import Image from "../components/Image";
 import { getClass } from "../utils/helper";
 
 const Photos = () => {
-  const { photos } = useContext(PhotoContext);
+  const { isLoading, isError, getPhotos } = useContext(PhotoContext);
 
   return (
     <main className="photos">
-      {photos.map((photo, index) => (
+      {isLoading() && <p>Is loading...</p>}
+      {!isLoading() && getPhotos().map((photo, index) => (
         <Image key={photo.id} img={photo} className={getClass(index)} />
       ))}
+      {isError() && <p>"Something went wrong, try again..."</p>}
     </main>
   );
 };

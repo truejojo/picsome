@@ -4,8 +4,8 @@ import CartItem from "../components/CartItem";
 
 const Cart = () => {
   const [isOrderd, setIsOrderd] = useState(false);
-  const { cartItems, setCartItemsToStart } = useContext(PhotoContext);
-  const totalPrice = (cartItems.length * 5.99).toLocaleString("de-DE", {
+  const { getCartItems, setCartItemsToStart } = useContext(PhotoContext);
+  const totalPrice = (getCartItems().length * 5.99).toLocaleString("de-DE", {
     style: "currency",
     currency: "EUR",
   });
@@ -23,11 +23,11 @@ const Cart = () => {
   return (
     <main className="cart-page">
       <h1>Check out</h1>
-      {cartItems.map((item) => (
+      {getCartItems().map((item) => (
         <CartItem key={item.id} item={item} />
       ))}
       <p className="total-cost">Total: {totalPrice}</p>
-      {cartItems.length > 0 ? (
+      {getCartItems().length > 0 ? (
         <div className="order-button">
           <button onClick={handleClick}>
             {`${isOrderd ? "Ordering..." : "Place Order"}`}
