@@ -1,11 +1,10 @@
-import { useContext } from "react";
 import useHover from "../hooks/useHover";
-import { PhotoContext } from "../PhotoContext";
+import { usePhotoContext } from "../PhotoContext";
 
 const Image = ({ className, img }) => {
   const {isHovered, hoveredRef} = useHover();
   const { isToggleFavorite, addToCart, deleteFromCart, getCartItems } =
-    useContext(PhotoContext);
+    usePhotoContext();
 
   const heartIcon = (
     <i

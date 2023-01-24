@@ -1,10 +1,10 @@
 import React from "react";
-import { useContext } from "react";
-import { PhotoContext } from "../PhotoContext";
+// import { useContext } from "react";
+import { usePhotoContext } from "../PhotoContext";
 import useHover from "../hooks/useHover";
 
 const CartItem = ({ item }) => {
-  const { deleteFromCart } = useContext(PhotoContext);
+  const { deleteFromCart } = usePhotoContext();
   const {isHovered, hoveredRef} = useHover();
 
   return (

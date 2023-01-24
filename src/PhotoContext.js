@@ -1,7 +1,19 @@
+import { createContext, useContext, useReducer, useEffect } from "react";
 import axios from "axios";
-import { createContext, useReducer, useEffect } from "react";
 
 const PhotoContext = createContext();
+
+const usePhotoContext = () => {
+  const photoContextValue = useContext(PhotoContext);
+
+  if (!photoContextValue) {
+    throw new Error(
+      "usePhotoContext must be called from within an PhotoContextProvider"
+    );
+  }
+
+  return photoContextValue;
+};
 
 const url =
   "https://raw.githubusercontent.com/bobziroll/scrimba-react-bootcamp-images/master/images.json";
@@ -117,4 +129,4 @@ const PhotoContextProvider = ({ children }) => {
   );
 };
 
-export { PhotoContextProvider, PhotoContext };
+export { PhotoContextProvider, usePhotoContext };

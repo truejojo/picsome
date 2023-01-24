@@ -1,10 +1,10 @@
-import { useState, useContext } from "react";
-import { PhotoContext } from "../PhotoContext";
+import { useState } from "react";
+import { usePhotoContext } from "../PhotoContext";
 import CartItem from "../components/CartItem";
 
 const Cart = () => {
   const [isOrderd, setIsOrderd] = useState(false);
-  const { getCartItems, setCartItemsToStart } = useContext(PhotoContext);
+  const { getCartItems, setCartItemsToStart } = usePhotoContext();
   const totalPrice = (getCartItems().length * 5.99).toLocaleString("de-DE", {
     style: "currency",
     currency: "EUR",

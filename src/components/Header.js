@@ -1,9 +1,8 @@
-import { useContext } from "react";
 import { NavLink } from "react-router-dom";
-import { PhotoContext } from "../PhotoContext";
+import { usePhotoContext } from "../PhotoContext";
 
 const Header = () => {
-  const { getCartItems } = useContext(PhotoContext);
+  const { getCartItems } = usePhotoContext();
 
   return (
     <header className="page-header">
