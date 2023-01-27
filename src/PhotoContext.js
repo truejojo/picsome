@@ -26,13 +26,15 @@ const initialState = {
 };
 
 const reducer = (state, action) => {
-  switch (action.type) {
+  const {type, data, id, img} = action;
+
+  switch (type) {
     case "FETCH_SUCCESS":
       return {
         ...state,
         loading: false,
         error: false,
-        photos: action.data,
+        photos: data,
       };
 
     case "FETCH_ERROR":
@@ -46,7 +48,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         photos: state.photos.map((photo) =>
-          photo.id === action.id
+          photo.id === id
             ? { ...photo, isFavorite: !photo.isFavorite }
             : photo
         ),
@@ -55,14 +57,14 @@ const reducer = (state, action) => {
     case "ADD_TO_CART":
       return {
         ...state,
-        cartItems: [...state.cartItems, action.img],
+        cartItems: [...state.cartItems, img],
       };
 
     case "DELETE_FROM_CART":
       return {
         ...state,
         cartItems: state.cartItems.filter(
-          (current) => current.id !== action.img.id
+          (currentImg) => currentImg.id !== img.id
         ),
       };
 
@@ -93,12 +95,12 @@ const PhotoContextProvider = ({ children }) => {
   }, []);
 
   const isToggleFavorite = (id) =>
-    dispatch({ type: "TOGGLE_FAVORITE", id: id });
+    dispatch({ type: "TOGGLE_FAVORITE", id });
 
-  const addToCart = (img) => dispatch({ type: "ADD_TO_CART", img: img });
+  const addToCart = (img) => dispatch({ type: "ADD_TO_CART", img });
 
   const deleteFromCart = (img) =>
-    dispatch({ type: "DELETE_FROM_CART", img: img });
+    dispatch({ type: "DELETE_FROM_CART", img });
 
   const setCartItemsToStart = () =>
     dispatch({ type: "SET_CART_ITEMS_TO_NULL" });
